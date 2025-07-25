@@ -35,7 +35,7 @@ This is a Laravel-based multi-tenant blog platform that supports:
 ### 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/laravel-multitenant-blog.git
+git clone https://github.com/yourusername/BlogCraft.git
 cd laravel-multitenant-blog
 ```
 
