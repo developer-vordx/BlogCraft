@@ -86,6 +86,7 @@ Edit your `/etc/hosts` file (Linux/macOS) or `C:\Windows\System32\drivers\etc\ho
 ```text
 127.0.0.1 tenant1.app.test
 127.0.0.1 tenant2.app.test
+127.0.0.1 admin.app.test
 ```
 
 ---
@@ -148,7 +149,7 @@ php artisan test
 OR run a specific test class:
 
 ```bash
-php artisan test --filter=UserPostFlowTest
+php artisan test --filter=UserPostFlowTest --env=testing
 ```
 
 ✅ The system will now:

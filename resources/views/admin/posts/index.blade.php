@@ -30,7 +30,7 @@
         <!-- Posts Container -->
         <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($posts as $post)
-                @include('posts.card', ['post' => $post])
+                @include('admin.posts.card', ['post' => $post])
             @endforeach
         </div>
 

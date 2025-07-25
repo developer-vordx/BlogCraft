@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        <a href="dashboard.html" class="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors">
+                        <a href="{{ route('dashboard') }}" class="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors">
                             Cancel
                         </a>
                         <div class="flex space-x-4">
@@ -117,10 +117,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Profile dropdown functionality
-            const profileBtn = document.getElementById('profile-btn');
-            const profileDropdown = document.getElementById('profile-dropdown');
-            const profileChevron = document.getElementById('profile-chevron');
-            const logoutBtn = document.getElementById('logout-btn');
+
             const createPostForm = document.getElementById('create-post-form');
 
             // Image upload functionality
@@ -188,8 +185,6 @@
                 // Show image preview first
                 showImagePreview(file);
 
-                // Then show upload overlay
-                showUploadOverlay();
 
                 // Simulate upload progress
                 let progress = 0;
@@ -199,21 +194,10 @@
                         progress = 100;
                         clearInterval(interval);
                         setTimeout(() => {
-                            hideUploadOverlay();
+
                         }, 500);
                     }
-                    updateProgress(progress);
                 }, 200);
-            }
-
-
-            function hideUploadOverlay() {
-                uploadOverlay.classList.add('hidden');
-            }
-
-            function updateProgress(progress) {
-                overlayProgressBar.style.width = progress + '%';
-                overlayProgressText.textContent = Math.round(progress) + '%';
             }
 
             function showImagePreview(file) {
@@ -235,10 +219,6 @@
 
                 uploadPlaceholder.classList.remove('hidden');
                 imagePreview.classList.add('hidden');
-                uploadOverlay.classList.add('hidden');
-
-                overlayProgressBar.style.width = '0%';
-                overlayProgressText.textContent = '0%';
             }
 
             function formatFileSize(bytes) {

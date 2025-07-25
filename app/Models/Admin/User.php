@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -31,7 +31,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
     /**
      * Get the attributes that should be cast.
      *
@@ -46,15 +45,16 @@ class User extends Authenticatable
     }
 
 
+
     // In User.php model
     public function tenant()
     {
-        return $this->belongsTo(\App\Models\Admin\Tenant::class);
+        return $this->belongsTo(\App\Models\Tenant::class);
     }
 
     public function posts()
     {
-        return $this->hasMany(\App\Models\Admin\Post::class, 'created_by');
+        return $this->hasMany(Post::class, 'created_by');
     }
 
 }

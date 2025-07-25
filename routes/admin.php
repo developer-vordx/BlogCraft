@@ -24,4 +24,8 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'auth', 'admin'])->gr
     // Posts
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::post('posts/{post}/update', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
 });

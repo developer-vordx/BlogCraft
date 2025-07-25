@@ -45,21 +45,24 @@
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                <span> {{$post->getEstimatedReadingTime()}} min read
+                                <span> {{$post->getEstimatedReadingTime()}} min read </span>
                             </div>
                         </div>
+                        @if($post->created_by == \Illuminate\Support\Facades\Auth::id())
                         <div class="flex items-center space-x-2">
-                            <button class="p-2 text-gray-400 hover:text-orange-500 transition-colors" title="Edit Post">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="{{ route('posts.edit', $post) }}" class="p-1 text-gray-400 hover:text-orange-500 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                 </svg>
-                            </button>
-                            <button class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Delete Post" onclick="deletePost()">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            </a>
+                            <meta name="csrf-token" content="{{ csrf_token() }}">
+                            <button class="p-1 text-gray-400 hover:text-red-500 transition-colors" onclick="deletePost({{$post->id}})">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
                             </button>
                         </div>
+                        @endif
                     </div>
 
                     <!-- Post Title -->
@@ -168,25 +171,45 @@
     </div>
 
     <script>
+        function deletePost(id) {
+            if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                return;
+            }
+
+            const article = document.getElementById(`article-${id}`);
+
+            fetch(`/posts/${id}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+                .then(async response => {
+                    if (!response.ok) {
+                        const data = await response.json();
+                        throw new Error(data.message || 'Failed to delete post.');
+                    }
+
+                    // Fade out and remove the article
+                    article.style.opacity = '0.5';
+                    setTimeout(() => {
+                        article.remove();
+                        alert('Post deleted successfully!');
+                    }, 300);
+                })
+                .catch(error => {
+                    alert(error.message || 'An error occurred.');
+                    article.style.opacity = '1'; // Reset opacity on error
+                });
+        }
+    </script>
+
+    <script>
 
         // Like functionality
         let isLiked = false;
-        function toggleLike() {
-            const likeIcon = document.getElementById('like-icon');
-            const likeCount = document.getElementById('like-count');
 
-            if (isLiked) {
-                likeIcon.classList.remove('fill-red-500', 'text-red-500');
-                likeIcon.classList.add('text-gray-500');
-                likeCount.textContent = {{ $post->likes->count() }};
-                isLiked = false;
-            } else {
-                likeIcon.classList.remove('text-gray-500');
-                likeIcon.classList.add('fill-red-500', 'text-red-500');
-                likeCount.textContent = {{ $post->likes->count()+1 }};
-                isLiked = true;
-            }
-        }
 
         // Delete post functionality
         function deletePost() {

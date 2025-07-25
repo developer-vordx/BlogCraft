@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
-use App\Models\PostLike;
-use App\Models\PostView;
+use App\Models\Admin\Post;
+use App\Models\Admin\PostLike;
+use App\Models\Admin\PostView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,11 +14,8 @@ class AdminController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $tenantId = tenantId();
 
-        $userPostIds = Post::where('tenant_id', $tenantId)
-            ->pluck('id');
-
+        $userPostIds = Post::pluck('id');
         $totalPosts = $userPostIds->count();
         $newPostsThisMonth = Post::whereIn('id', $userPostIds)
             ->whereMonth('created_at', now()->month)

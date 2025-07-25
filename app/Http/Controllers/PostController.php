@@ -88,21 +88,20 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::with(['category', 'likes', 'views'])
-            ->where('tenant_id', tenantId())
-            ->where('created_by', Auth::id())
             ->where('id', $id)
             ->first();
         if (!$post) {
             abort(404, 'Post not found.');
         }
         return view('posts.edit', [
-            'categories' => Category::where('tenant_id', tenantId())->get(),
+            'categories' => Category::where('tenant_id', $post->tenant_id)->get(),
             'post' => $post,
         ]);
     }
 
     public function update(UpdatePostRequest $request, UpdatePostService $postService, Post $post)
     {
+
         $response = $postService->update($request,$post);
 
         return response()->json($response);
@@ -111,9 +110,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         try {
-            $post = Post::where('tenant_id', tenantId())
-                ->where('created_by', Auth::id())
-                ->where('id', $id)
+            $post = Post::where('id', $id)
                 ->first();
 
             if (!$post) {

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Edit Post')
+@section('title', 'Dashboard')
 
 @section('content')
     <script src="https://cdn.tiny.cloud/1/d51tkp0lzhdf6js5sdism22hlqyqfnh2yctvilkj3ow5zrec/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
@@ -10,7 +10,7 @@
         <div class="max-w-4xl mx-auto">
             <div class="bg-white rounded-xl shadow-sm p-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-8">Update Post</h1>
-                <form id="create-post-form" class="space-y-6" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
+                <form id="create-post-form" class="space-y-6" action="{{ route('admin.posts.update', $post->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div>
                         <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Post Title</label>
@@ -55,36 +55,35 @@
                                 </div>
                             </div>
 
+
                             <!-- Image Preview State -->
-                            <div id="image-preview">
-                                <!-- Image Preview State -->
-                                <div id="image-preview" class="{{ $post->featured_image ? '' : 'hidden' }}">
-                                    <div class="relative inline-block">
-                                        <img id="preview-image"
-                                             src="{{ $post->featured_image ? asset($post->featured_image) : '' }}"
-                                             alt="Feature image preview"
-                                             class="max-w-full max-h-64 rounded-lg shadow-md">
-                                        <button type="button" id="remove-image" class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-lg">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <p id="image-name" class="text-sm text-gray-600 mt-3 font-medium">
-                                        {{ $post->featured_image ? basename($post->featured_image) : '' }}
-                                    </p>
-                                    <p id="image-size" class="text-xs text-gray-400">
-                                        {{ $post->featured_image ? '' : '' }} <!-- Optional: Add actual file size if you want -->
-                                    </p>
+                            <div id="image-preview" class="{{ $post->featured_image ? '' : 'hidden' }}">
+                                <div class="relative inline-block">
+                                    <img id="preview-image"
+                                         src="{{ $post->featured_image ? asset($post->featured_image) : '' }}"
+                                         alt="Feature image preview"
+                                         class="max-w-full max-h-64 rounded-lg shadow-md">
+                                    <button type="button" id="remove-image" class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
                                 </div>
+                                <p id="image-name" class="text-sm text-gray-600 mt-3 font-medium">
+                                    {{ $post->featured_image ? basename($post->featured_image) : '' }}
+                                </p>
+                                <p id="image-size" class="text-xs text-gray-400">
+                                    {{ $post->featured_image ? '' : '' }} <!-- Optional: Add actual file size if you want -->
+                                </p>
+                            </div>
 
-                                <!-- Upload Placeholder -->
-                                <div id="upload-placeholder" class="{{ $post->featured_image ? 'hidden' : '' }} space-y-4">
-                                    <!-- ...existing placeholder content... -->
-                                </div>
+                            <!-- Upload Placeholder -->
+                            <div id="upload-placeholder" class="{{ $post->featured_image ? 'hidden' : '' }} space-y-4">
+                                <!-- ...existing placeholder content... -->
+                            </div>
 
 
-                                <!-- Upload Progress State -->
+                            <!-- Upload Progress State -->
                             <div id="upload-progress" class="hidden space-y-4">
                                 <div class="mx-auto w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
                                     <svg class="w-8 h-8 text-orange-500 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -102,40 +101,36 @@
                             </div>
 
                             <input type="file" id="feature_image" name="featured_image" value="{{$post->featured_image}}" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
                         </div>
-                    </div>
 
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                        <textarea id="content" name="content" rows="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors resize-none" placeholder="Start writing your amazing content..." required>
+                        <div>
+                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                            <textarea id="content" name="content" rows="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-colors resize-none" placeholder="Start writing your amazing content..." required>
                             {{ $post->content }}
                         </textarea>
-                        @error('content')
-                        <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('posts.index') }}" class="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors">
-                            Cancel
-                        </a>
-                        <div class="flex space-x-4">
-                            <button type="submit" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
-                                Publish Post
-                            </button>
+                            @error('content')
+                            <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
+                            @enderror
                         </div>
-                    </div>
+
+                        <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                            <a href="{{ route('posts.index') }}" class="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors">
+                                Cancel
+                            </a>
+                            <div class="flex space-x-4">
+                                <button type="submit" class="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                                    Publish Post
+                                </button>
+                            </div>
+                        </div>
                 </form>
             </div>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Profile dropdown functionality
-            const profileBtn = document.getElementById('profile-btn');
-            const profileDropdown = document.getElementById('profile-dropdown');
-            const profileChevron = document.getElementById('profile-chevron');
-            const logoutBtn = document.getElementById('logout-btn');
+
             const createPostForm = document.getElementById('create-post-form');
 
             // Image upload functionality
@@ -204,8 +199,6 @@
                 // Show image preview first
                 showImagePreview(file);
 
-                // Then show upload overlay
-                showUploadOverlay();
 
                 // Simulate upload progress
                 let progress = 0;
@@ -215,21 +208,9 @@
                         progress = 100;
                         clearInterval(interval);
                         setTimeout(() => {
-                            hideUploadOverlay();
                         }, 500);
                     }
-                    updateProgress(progress);
                 }, 200);
-            }
-
-
-            function hideUploadOverlay() {
-                uploadOverlay.classList.add('hidden');
-            }
-
-            function updateProgress(progress) {
-                overlayProgressBar.style.width = progress + '%';
-                overlayProgressText.textContent = Math.round(progress) + '%';
             }
 
             function showImagePreview(file) {
@@ -251,10 +232,7 @@
 
                 uploadPlaceholder.classList.remove('hidden');
                 imagePreview.classList.add('hidden');
-                uploadOverlay.classList.add('hidden');
 
-                overlayProgressBar.style.width = '0%';
-                overlayProgressText.textContent = '0%';
             }
 
             function formatFileSize(bytes) {
@@ -283,6 +261,7 @@
                 })
                     .then(async response => {
                         if (!response.ok) {
+
                             const data = await response.json();
 
                             if (response.status === 422 && data.errors) {
@@ -307,7 +286,7 @@
                     .then(data => {
                         if (data.status === 'success') {
                             alert(data.message || 'Post created successfully!');
-                            window.location.href = "{{ route('posts.index') }}";
+                            window.location.href = "{{ route('admin.posts.index') }}";
                         } else {
                             alert(data.message || 'Failed to create post.');
                         }

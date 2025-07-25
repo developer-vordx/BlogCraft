@@ -197,7 +197,7 @@
         }
 
         function toggleLike(postId) {
-            fetch(`/posts/${postId}/like`, {
+            fetch(`/admin/posts/${postId}/like`, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
