@@ -16,11 +16,20 @@ class LoginService
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
 
-                return [
-                    'success' => true,
-                    'redirect_to' => '/dashboard',
-                    'message' => 'Login successful.'
-                ];
+                if (Auth::user()->status == 'admin'){
+                    return [
+                        'success' => true,
+                        'redirect_to' => '/admin/dashboard',
+                        'message' => 'Login successful.'
+                    ];
+                } else {
+                    return [
+                        'success' => true,
+                        'redirect_to' => '/dashboard',
+                        'message' => 'Login successful.'
+                    ];
+                }
+
 
             }
 

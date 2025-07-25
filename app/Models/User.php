@@ -44,4 +44,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    // In User.php model
+    public function tenant()
+    {
+        return $this->belongsTo(\App\Models\Tenant::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'created_by');
+    }
+
 }

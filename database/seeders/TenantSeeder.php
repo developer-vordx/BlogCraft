@@ -13,6 +13,12 @@ class TenantSeeder extends Seeder
      */
     public function run(): void
     {
+
+        Tenant::factory()->create([
+            'name' => 'Admin',
+            'slug' => 'admin',
+        ]);
+
         Tenant::factory()->create([
             'name' => 'Tenant1',
             'slug' => 'tenant1',
@@ -22,6 +28,5 @@ class TenantSeeder extends Seeder
             'name' => 'Tenant2',
             'slug' => 'tenant2',
         ]);
-
     }
 }
